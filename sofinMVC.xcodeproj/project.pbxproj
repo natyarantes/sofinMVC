@@ -74,7 +74,6 @@
 				59C51CC17B4F81C4A2F2E18A /* Pods-sofinMVC.debug.xcconfig */,
 				05C87CA6892956DFC00C4757 /* Pods-sofinMVC.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

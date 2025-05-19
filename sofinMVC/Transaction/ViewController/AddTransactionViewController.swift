@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
@@ -152,16 +153,23 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
         let description = descriptionField.text?.isEmpty == false ? descriptionField.text : nil
         let date = dateField.date
 
-        let transaction = Transaction(
-            amount: amount,
-            category: category,
-            date: date,
-            description: description,
-            type: transactionType
-        )
+        let context = CoreDataManager.shared.context
+        let transaction = FinancialTransaction(context: context)
+        transaction.id = UUID()
+        transaction.amount = amount
+        transaction.transactionCategory = category
+        transaction.date = date
+        transaction.transactionDescription = description
+        transaction.transactionType = transactionType
 
-        print("✅ Saved transaction: \(transaction)")
-        dismiss(animated: true)
+        do {
+            try context.save()
+            print("✅ Saved transaction: \(transaction)")
+            dismiss(animated: true)
+        } catch {
+            print("❌ Erro ao salvar: \(error.localizedDescription)")
+            showAlert(message: "Erro ao salvar a transação.")
+        }
     }
 
     private func showAlert(message: String) {
@@ -171,3 +179,24 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
     }
 }
 
+extension AddTransactionViewController {
+
+    func saveTransaction(title: String, amount: Double, date: Date, isIncome: Bool) {
+        let context = CoreDataManager.shared.context
+
+        let transaction = FinancialTransaction(context: context)
+        transaction.id = UUID()
+        transaction.title = title
+        transaction.amount = amount
+        transaction.date = date
+        transaction.isIncome = isIncome
+
+        do {
+            try context.save()
+            print("Transação salva com sucesso!")
+            dismiss(animated: true)
+        } catch {
+            print("Erro ao salvar transação: \(error.localizedDescription)")
+        }
+    }
+}
