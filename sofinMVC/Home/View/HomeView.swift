@@ -4,19 +4,20 @@
 //
 //  Created by Natália Arantes on 13/05/25.
 //
-
 import UIKit
 
 class HomeView: UIView {
 
-    // MARK: - Componentes
-    
+    // MARK: - Subviews
+
+    private let scrollView = UIScrollView()
+    private let contentStack = UIStackView()
+
     private let tituloLabel: UILabel = {
         let label = UILabel()
         label.text = "Sofin"
         label.font = .systemFont(ofSize: 34, weight: .bold)
-        label.textColor = UIColor(named: "AccentColor") ?? .accent
-        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .accent
         return label
     }()
 
@@ -40,7 +41,6 @@ class HomeView: UIView {
         let view = UIView()
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 12
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
@@ -55,26 +55,45 @@ class HomeView: UIView {
     private let receitasLabel = HomeView.itemLabel(title: "Receitas", value: "R$ 500,00", color: .highLightIncome)
     private let despesasLabel = HomeView.itemLabel(title: "Despesas", value: "R$ 300,00", color: .highLightExpense)
 
-    private let transacoesLabel: UILabel = {
+    private let entradasLabel: UILabel = {
         let label = UILabel()
-        label.text = "Transações"
+        label.text = "Entradas"
         label.font = .systemFont(ofSize: 20, weight: .semibold)
         label.textColor = .accent
         return label
     }()
 
-    private let transacoesStack: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .vertical
-        stack.spacing = 12
-        return stack
+    private let saidasLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Saídas"
+        label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.textColor = .accent
+        return label
     }()
+
+    let incomeTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.isScrollEnabled = false
+        tableView.tableFooterView = UIView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+
+    let expenseTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.isScrollEnabled = false
+        tableView.tableFooterView = UIView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    
+    private var incomeTableHeightConstraint: NSLayoutConstraint!
+    private var expenseTableHeightConstraint: NSLayoutConstraint!
 
     // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .systemBackground
         setupLayout()
     }
 
@@ -82,54 +101,64 @@ class HomeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Layout
+    // MARK: - Setup
 
     private func setupLayout() {
-        addSubview(tituloLabel)
+        backgroundColor = .systemBackground
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentStack.axis = .vertical
+        contentStack.spacing = 24
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(scrollView)
+        scrollView.addSubview(contentStack)
+
+        contentStack.addArrangedSubview(tituloLabel)
+
         let saldoStack = UIStackView(arrangedSubviews: [saldoLabel, saldoValorLabel])
         saldoStack.axis = .vertical
         saldoStack.spacing = 4
-
-        saldoCardView.addSubview(saldoStack)
         saldoStack.translatesAutoresizingMaskIntoConstraints = false
 
-        NSLayoutConstraint.activate([
-            tituloLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-            tituloLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+        saldoCardView.addSubview(saldoStack)
+        contentStack.addArrangedSubview(saldoCardView)
 
+        NSLayoutConstraint.activate([
             saldoStack.topAnchor.constraint(equalTo: saldoCardView.topAnchor, constant: 12),
             saldoStack.leadingAnchor.constraint(equalTo: saldoCardView.leadingAnchor, constant: 16),
             saldoStack.trailingAnchor.constraint(equalTo: saldoCardView.trailingAnchor, constant: -16),
             saldoStack.bottomAnchor.constraint(equalTo: saldoCardView.bottomAnchor, constant: -12)
         ])
 
+        contentStack.addArrangedSubview(visaoGeralLabel)
         let visaoGeralStack = UIStackView(arrangedSubviews: [receitasLabel, despesasLabel])
         visaoGeralStack.axis = .vertical
         visaoGeralStack.spacing = 32
+        contentStack.addArrangedSubview(visaoGeralStack)
 
-        let mainStack = UIStackView(arrangedSubviews: [
-            saldoCardView,
-            visaoGeralLabel,
-            visaoGeralStack,
-            transacoesLabel,
-            transacoesStack
-        ])
-        mainStack.axis = .vertical
-        mainStack.spacing = 24
-        mainStack.translatesAutoresizingMaskIntoConstraints = false
-
-        addSubview(mainStack)
+        contentStack.addArrangedSubview(entradasLabel)
+        contentStack.addArrangedSubview(incomeTableView)
+        contentStack.addArrangedSubview(saidasLabel)
+        contentStack.addArrangedSubview(expenseTableView)
+        
+        incomeTableHeightConstraint = incomeTableView.heightAnchor.constraint(equalToConstant: 100)
+        expenseTableHeightConstraint = expenseTableView.heightAnchor.constraint(equalToConstant: 100)
 
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: tituloLabel.bottomAnchor, constant: 24),
-            mainStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            mainStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
-        ])
+            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-        // Transações mockadas
-        adicionarTransacao(titulo: "Alimentação", valor: "R$ 250,00")
-        adicionarTransacao(titulo: "Transporte", valor: "R$ 50,00")
-        adicionarTransacao(titulo: "Lazer", valor: "R$ 150,00")
+            contentStack.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 20),
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 20),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -20),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20),
+            contentStack.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -40),
+            
+            incomeTableHeightConstraint,
+            expenseTableHeightConstraint
+        ])
     }
 
     // MARK: - Helpers
@@ -147,9 +176,29 @@ class HomeView: UIView {
         label.attributedText = attributedText
         return label
     }
+    
+    func atualizarAlturaDasTabelas() {
+        incomeTableView.layoutIfNeeded()
+        expenseTableView.layoutIfNeeded()
 
-    private func adicionarTransacao(titulo: String, valor: String) {
-        let label = HomeView.itemLabel(title: titulo, value: valor, color: UIColor(named: "mainColor"))
-        transacoesStack.addArrangedSubview(label)
+        incomeTableHeightConstraint.constant = incomeTableView.contentSize.height
+        expenseTableHeightConstraint.constant = expenseTableView.contentSize.height
+    }
+
+    // MARK: - Acesso aos valores
+
+    var incomeTable: UITableView { incomeTableView }
+    var expenseTable: UITableView { expenseTableView }
+    
+    var saldoValorLabelPublico: UILabel {
+        return saldoValorLabel
+    }
+
+    var receitasLabelPublico: UILabel {
+        return receitasLabel
+    }
+
+    var despesasLabelPublico: UILabel {
+        return despesasLabel
     }
 }

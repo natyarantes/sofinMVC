@@ -6,31 +6,108 @@
 //
 
 import UIKit
+import CoreData
 
 class HomeViewController: UIViewController {
 
     private let homeView = HomeView()
+    private var transactions: [FinancialTransaction] = []
+    private var incomeTransactions: [FinancialTransaction] = []
+    private var expenseTransactions: [FinancialTransaction] = []
+
 
     override func loadView() {
-        // Define a HomeView como a view principal da tela
         self.view = homeView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        homeView.incomeTable.dataSource = self
+        homeView.expenseTable.dataSource = self
+
         configureNavigation()
+        fetchTransactions()
     }
 
     private func configureNavigation() {
-        // Esconde o título grande e usa um visual mais clean como no mock
-//        navigationItem.title = "Sofin"
         navigationController?.navigationBar.prefersLargeTitles = false
-
-        // Se quiser estilizar a navbar (cor, texto, etc.)
         navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor(named: "mainColor") ?? .black,
+            .foregroundColor: UIColor(named: "accentColor") ?? .black,
             .font: UIFont.systemFont(ofSize: 22, weight: .semibold)
         ]
     }
+    
+    private func fetchTransactions() {
+        let context = CoreDataManager.shared.context
+        let fetchRequest: NSFetchRequest<FinancialTransaction> = FinancialTransaction.fetchRequest()
+        let totalReceitas = incomeTransactions.reduce(0) { $0 + $1.amount }
+        let totalDespesas = expenseTransactions.reduce(0) { $0 + $1.amount }
+        let saldo = totalReceitas - totalDespesas
+        
+        do {
+            transactions = try context.fetch(fetchRequest)
+            incomeTransactions = transactions.filter { $0.transactionType == "income" }
+            expenseTransactions = transactions.filter { $0.transactionType == "expense" }
+            homeView.incomeTable.reloadData()
+            homeView.expenseTable.reloadData()
+            homeView.atualizarAlturaDasTabelas()
+        } catch {
+            print("❌ Erro ao buscar transações: \(error.localizedDescription)")
+        }
+        
+        homeView.saldoValorLabelPublico.text = formatarParaBRL(saldo)
+
+        homeView.receitasLabelPublico.attributedText = HomeView.itemLabel(
+            title: "Receitas",
+            value: formatarParaBRL(totalReceitas),
+            color: .highLightIncome
+        ).attributedText
+
+        homeView.despesasLabelPublico.attributedText = HomeView.itemLabel(
+            title: "Despesas",
+            value: formatarParaBRL(totalDespesas),
+            color: .highLightExpense
+        ).attributedText
+    }
 }
 
+extension HomeViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == homeView.incomeTable {
+            return incomeTransactions.count
+        } else {
+            return expenseTransactions.count
+        }
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let transaction: FinancialTransaction
+
+        if tableView == homeView.incomeTable {
+            transaction = incomeTransactions[indexPath.row]
+        } else {
+            transaction = expenseTransactions[indexPath.row]
+        }
+
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "TransactionCell")
+        cell.textLabel?.text = transaction.transactionCategory
+        cell.detailTextLabel?.text = String(format: "R$ %.2f - %@", transaction.amount, formatDate(transaction.date))
+        return cell
+    }
+
+    private func formatDate(_ date: Date?) -> String {
+        guard let date = date else { return "" }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        return formatter.string(from: date)
+    }
+    
+    private func formatarParaBRL(_ valor: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale(identifier: "pt_BR")
+        return formatter.string(from: NSNumber(value: valor)) ?? "R$ 0,00"
+    }
+
+}
