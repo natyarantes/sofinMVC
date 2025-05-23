@@ -11,9 +11,10 @@ import CoreData
 class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     private let transactionType: String
-    private let categories = ["Alimentação", "Transporte", "Entretenimento", "Salário", "Outro"]
+    private let incomeCategories = ["Salário", "Outros"]
+    private let expenseCategories = ["Moradia", "Transporte", "Alimentação", "Lazer", "Outros"]
 
-    private let pickerView = UIPickerView()
+    private let categoryPicker = UIPickerView()
 
     init(type: String) {
         self.transactionType = type
@@ -90,9 +91,12 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
     }
 
     private func setupPicker() {
-        pickerView.delegate = self
-        pickerView.dataSource = self
-        categoryField.inputView = pickerView
+        categoryPicker.delegate = self
+        categoryPicker.dataSource = self
+        categoryField.inputView = categoryPicker
+        
+        let firstCategory = transactionType == "income" ? incomeCategories.first : expenseCategories.first
+        categoryField.text = firstCategory
     }
 
     private func setupLayout() {
@@ -123,19 +127,21 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
 
     // MARK: - PickerView
 
-    func numberOfComponents(in pickerView: UIPickerView) -> Int { return 1 }
-
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return categories.count
+        return transactionType == "income" ? incomeCategories.count : expenseCategories.count
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return categories[row]
+        return transactionType == "income" ? incomeCategories[row] : expenseCategories[row]
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        categoryField.text = categories[row]
-        categoryField.resignFirstResponder()
+        let selected = transactionType == "income" ? incomeCategories[row] : expenseCategories[row]
+        categoryField.text = selected
     }
     
     // MARK: - Save data
@@ -147,6 +153,13 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
             !category.isEmpty
         else {
             showAlert(message: "Por favor preencha todos os campos obrigatórios!")
+            return
+        }
+        
+        // Allows comma or dot for double values
+        let normalizedAmountText = amountText.replacingOccurrences(of: ",", with: ".")
+        guard let amount = Double(normalizedAmountText) else {
+            showAlert(message: "O valor inserido não é válido. Use números como 100,50 ou 100.50.")
             return
         }
 
@@ -164,6 +177,7 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
 
         do {
             try context.save()
+            NotificationCenter.default.post(name: NSNotification.Name("TransactionSaved"), object: nil)
             print("✅ Saved transaction: \(transaction)")
             dismiss(animated: true)
         } catch {

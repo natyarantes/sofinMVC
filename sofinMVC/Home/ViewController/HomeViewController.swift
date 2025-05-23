@@ -25,10 +25,22 @@ class HomeViewController: UIViewController {
         
         homeView.incomeTable.dataSource = self
         homeView.expenseTable.dataSource = self
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleTransactionSaved),
+            name: NSNotification.Name("TransactionSaved"),
+            object: nil
+        )
 
         configureNavigation()
         fetchTransactions()
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
 
     private func configureNavigation() {
         navigationController?.navigationBar.prefersLargeTitles = false
@@ -70,6 +82,11 @@ class HomeViewController: UIViewController {
             color: .highLightExpense
         ).attributedText
     }
+    
+    @objc private func handleTransactionSaved() {
+        fetchTransactions()
+    }
+
 }
 
 extension HomeViewController: UITableViewDataSource {
