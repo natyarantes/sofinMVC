@@ -10,9 +10,20 @@
 		C56E50BBB07C73DA77DAB57F /* Pods_sofinMVC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0469A9B0FCE4045E1570BC /* Pods_sofinMVC.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		29FA14D52DE2511E00919C06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2919B3DD2DD38DA8007D30C8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2919B3E42DD38DA8007D30C8;
+			remoteInfo = sofinMVC;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		05C87CA6892956DFC00C4757 /* Pods-sofinMVC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sofinMVC.release.xcconfig"; path = "Target Support Files/Pods-sofinMVC/Pods-sofinMVC.release.xcconfig"; sourceTree = "<group>"; };
 		2919B3E52DD38DA8007D30C8 /* sofinMVC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sofinMVC.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		29FA14D12DE2511E00919C06 /* sofinMVCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sofinMVCTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		59C51CC17B4F81C4A2F2E18A /* Pods-sofinMVC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sofinMVC.debug.xcconfig"; path = "Target Support Files/Pods-sofinMVC/Pods-sofinMVC.debug.xcconfig"; sourceTree = "<group>"; };
 		EB0469A9B0FCE4045E1570BC /* Pods_sofinMVC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_sofinMVC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +47,11 @@
 			path = sofinMVC;
 			sourceTree = "<group>";
 		};
+		29FA14D22DE2511E00919C06 /* sofinMVCTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = sofinMVCTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +63,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		29FA14CE2DE2511E00919C06 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -54,6 +77,7 @@
 			isa = PBXGroup;
 			children = (
 				2919B3E72DD38DA8007D30C8 /* sofinMVC */,
+				29FA14D22DE2511E00919C06 /* sofinMVCTests */,
 				2919B3E62DD38DA8007D30C8 /* Products */,
 				52F4B3CAF88ECBCE7CCC24F8 /* Pods */,
 				B74DA3FDD992D860176816AB /* Frameworks */,
@@ -64,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				2919B3E52DD38DA8007D30C8 /* sofinMVC.app */,
+				29FA14D12DE2511E00919C06 /* sofinMVCTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -109,6 +134,29 @@
 			productReference = 2919B3E52DD38DA8007D30C8 /* sofinMVC.app */;
 			productType = "com.apple.product-type.application";
 		};
+		29FA14D02DE2511E00919C06 /* sofinMVCTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 29FA14D92DE2511E00919C06 /* Build configuration list for PBXNativeTarget "sofinMVCTests" */;
+			buildPhases = (
+				29FA14CD2DE2511E00919C06 /* Sources */,
+				29FA14CE2DE2511E00919C06 /* Frameworks */,
+				29FA14CF2DE2511E00919C06 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				29FA14D62DE2511E00919C06 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				29FA14D22DE2511E00919C06 /* sofinMVCTests */,
+			);
+			name = sofinMVCTests;
+			packageProductDependencies = (
+			);
+			productName = sofinMVCTests;
+			productReference = 29FA14D12DE2511E00919C06 /* sofinMVCTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -121,6 +169,10 @@
 				TargetAttributes = {
 					2919B3E42DD38DA8007D30C8 = {
 						CreatedOnToolsVersion = 16.3;
+					};
+					29FA14D02DE2511E00919C06 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 2919B3E42DD38DA8007D30C8;
 					};
 				};
 			};
@@ -139,12 +191,20 @@
 			projectRoot = "";
 			targets = (
 				2919B3E42DD38DA8007D30C8 /* sofinMVC */,
+				29FA14D02DE2511E00919C06 /* sofinMVCTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2919B3E32DD38DA8007D30C8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29FA14CF2DE2511E00919C06 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -186,7 +246,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		29FA14CD2DE2511E00919C06 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		29FA14D62DE2511E00919C06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2919B3E42DD38DA8007D30C8 /* sofinMVC */;
+			targetProxy = 29FA14D52DE2511E00919C06 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2919B3F92DD38DAA007D30C8 /* Debug */ = {
@@ -368,6 +443,42 @@
 			};
 			name = Release;
 		};
+		29FA14D72DE2511E00919C06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QNQZT6P3XT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NatArantes.sofinMVCTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sofinMVC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/sofinMVC";
+			};
+			name = Debug;
+		};
+		29FA14D82DE2511E00919C06 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QNQZT6P3XT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NatArantes.sofinMVCTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sofinMVC.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/sofinMVC";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -385,6 +496,15 @@
 			buildConfigurations = (
 				2919B3F92DD38DAA007D30C8 /* Debug */,
 				2919B3FA2DD38DAA007D30C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		29FA14D92DE2511E00919C06 /* Build configuration list for PBXNativeTarget "sofinMVCTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29FA14D72DE2511E00919C06 /* Debug */,
+				29FA14D82DE2511E00919C06 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

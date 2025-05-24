@@ -146,20 +146,8 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
     
     // MARK: - Save data
     @objc private func saveTapped() {
-        guard
-            let amountText = amountField.text,
-            let amount = Double(amountText),
-            let category = categoryField.text,
-            !category.isEmpty
-        else {
-            showAlert(message: "Por favor preencha todos os campos obrigatórios!")
-            return
-        }
-        
-        // Allows comma or dot for double values
-        let normalizedAmountText = amountText.replacingOccurrences(of: ",", with: ".")
-        guard let amount = Double(normalizedAmountText) else {
-            showAlert(message: "O valor inserido não é válido. Use números como 100,50 ou 100.50.")
+        guard let amount = validateFields(amountText: amountField.text, category: categoryField.text) else {
+            showAlert(message: "Por favor preencha todos os campos obrigatórios ou verifique o valor inserido.")
             return
         }
 
@@ -170,7 +158,7 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
         let transaction = FinancialTransaction(context: context)
         transaction.id = UUID()
         transaction.amount = amount
-        transaction.transactionCategory = category
+        transaction.transactionCategory = categoryField.text
         transaction.date = date
         transaction.transactionDescription = description
         transaction.transactionType = transactionType
@@ -186,18 +174,31 @@ class AddTransactionViewController: UIViewController, UIPickerViewDelegate, UIPi
         }
     }
 
+
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Oops!", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
+    
+    func validateFields(amountText: String?, category: String?) -> Double? {
+        guard
+            let amountText = amountText,
+            !amountText.isEmpty,
+            let category = category,
+            !category.isEmpty
+        else {
+            return nil
+        }
+
+        let normalizedAmountText = amountText.replacingOccurrences(of: ",", with: ".")
+        return Double(normalizedAmountText)
+    }
 }
 
 extension AddTransactionViewController {
 
-    func saveTransaction(title: String, amount: Double, date: Date, isIncome: Bool) {
-        let context = CoreDataManager.shared.context
-
+    func saveTransaction(title: String, amount: Double, date: Date, isIncome: Bool, context: NSManagedObjectContext) {
         let transaction = FinancialTransaction(context: context)
         transaction.id = UUID()
         transaction.title = title
@@ -213,4 +214,5 @@ extension AddTransactionViewController {
             print("Erro ao salvar transação: \(error.localizedDescription)")
         }
     }
+
 }
