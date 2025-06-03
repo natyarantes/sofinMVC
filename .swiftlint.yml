@@ -1,0 +1,12 @@
+included:
+  - SofinMVC
+
+excluded:
+  - Pods
+
+opt_in_rules:
+  - cyclomatic_complexity
+
+cyclomatic_complexity:
+  warning: 5
+  error: 10
