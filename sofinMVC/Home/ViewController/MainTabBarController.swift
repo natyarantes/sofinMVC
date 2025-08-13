@@ -35,19 +35,24 @@ class MainTabBarController: UITabBarController {
 
     private func setupTabs() {
         let homeVC = UINavigationController(rootViewController: HomeViewController())
-        homeVC.tabBarItem = UITabBarItem(title: "Início", image: UIImage(systemName: "house.fill"), tag: 0)
-
-        let placeholderVC = UIViewController() // Aba central vazia
+        homeVC.tabBarItem = UITabBarItem(title: "Início",
+                                         image: UIImage(systemName: "house.fill"),
+                                         tag: 0)
+        let placeholderVC = UIViewController()
+        placeholderVC.view.backgroundColor = .systemBackground
         placeholderVC.tabBarItem = UITabBarItem(title: nil, image: nil, tag: 1)
 
-        let relatorioVC = UIViewController()
-        relatorioVC.view.backgroundColor = .white
-        relatorioVC.tabBarItem = UITabBarItem(title: "Relatório", image: UIImage(systemName: "chart.bar.fill"), tag: 2)
+        let reportsNav = UINavigationController(rootViewController: ReportsViewController())
+        reportsNav.tabBarItem = UITabBarItem(title: "Relatório",
+                                             image: UIImage(systemName: "chart.bar.fill"),
+                                             tag: 2)
 
-        viewControllers = [homeVC, placeholderVC, relatorioVC]
+        viewControllers = [homeVC, placeholderVC, reportsNav]
+
         tabBar.tintColor = UIColor(named: "mainColor") ?? .tintColor
         tabBar.unselectedItemTintColor = .systemGray3
     }
+
 
     private func setupFAB() {
         fabButton.translatesAutoresizingMaskIntoConstraints = false

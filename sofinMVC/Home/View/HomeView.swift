@@ -8,8 +8,6 @@ import UIKit
 
 class HomeView: UIView {
 
-    // MARK: - Subviews
-
     private let scrollView = UIScrollView()
     private let contentStack = UIStackView()
 
@@ -89,8 +87,6 @@ class HomeView: UIView {
     
     private var incomeTableHeightConstraint: NSLayoutConstraint!
     private var expenseTableHeightConstraint: NSLayoutConstraint!
-
-    // MARK: - Init
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -184,8 +180,6 @@ class HomeView: UIView {
         incomeTableHeightConstraint.constant = incomeTableView.contentSize.height
         expenseTableHeightConstraint.constant = expenseTableView.contentSize.height
     }
-
-    // MARK: - Acesso aos valores
 
     var incomeTable: UITableView { incomeTableView }
     var expenseTable: UITableView { expenseTableView }

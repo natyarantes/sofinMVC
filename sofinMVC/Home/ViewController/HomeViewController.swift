@@ -35,6 +35,13 @@ class HomeViewController: UIViewController {
 
         configureNavigation()
         fetchTransactions()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: "Relatórios",
+            style: .plain,
+            target: self,
+            action: #selector(openReports)
+        )
     }
     
     deinit {
@@ -86,7 +93,11 @@ class HomeViewController: UIViewController {
     @objc private func handleTransactionSaved() {
         fetchTransactions()
     }
-
+    
+    @objc private func openReports() {
+        let vc = ReportsViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension HomeViewController: UITableViewDataSource {
@@ -126,5 +137,4 @@ extension HomeViewController: UITableViewDataSource {
         formatter.locale = Locale(identifier: "pt_BR")
         return formatter.string(from: NSNumber(value: valor)) ?? "R$ 0,00"
     }
-
 }

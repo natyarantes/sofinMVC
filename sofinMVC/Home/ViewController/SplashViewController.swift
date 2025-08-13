@@ -22,7 +22,6 @@ class SplashViewController: UIViewController {
         view.backgroundColor = UIColor(named: "mainColor") ?? .white
         setupLayout()
 
-        // Transição para a Home após 1.5 segundos
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             let homeVC = HomeViewController()
             let navVC = UINavigationController(rootViewController: homeVC)
